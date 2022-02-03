@@ -1,0 +1,22 @@
+logging:
+    level:
+        blog: WARN
+        org: WARN
+        org.hibernate.SQL: DEBUG
+spring:
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        password: NikiYakimov@86589393
+        url: jdbc:mysql://localhost:3306/activity_new?useSSL=false&createDatabaseIfNotExist=true
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+                format_sql: true
+    mvc:
+        hiddenmethod:
+            filter:
+                enabled: true
