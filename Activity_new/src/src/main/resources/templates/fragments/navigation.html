@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="navigation">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">Activity</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li sec:authorize="!isAuthenticated()"
+                        class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/users/register}">Register</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/users/login}">Login</a>
+                    </li>
+                    <li  sec:authorize="isAuthenticated()"class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/add}">Add</a>
+                    </li>
+                    <li  sec:authorize="hasRole('ADMIN')" class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/admin}">Admin</a>
+                    </li>
+                    <li  sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/users/profile}">Profile</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <form th:action="@{/users/logout}" th:method="POST">
+                            <input class="nav-link active" aria-current="page" type="submit" value="Logout">
+                        </form>
+                    </li>
+                </ul>
+
+                <div class="navbar-nav me-auto mb-2 mb-md-0 text-light">
+                    <p>Welcome:
+                        <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+                        <span sec:authorize="!isAuthenticated()">Anonymous</span>
+                    </p>
+                </div>
+
+                <form class="d-flex">
+                    <h6 class="text-light">Температурата в София:</h6><h6></h6>
+                    <h6 class="text-light"><span id="box-a-temp">11</span><span>&#8451;</span></h6>
+                    <img class="bg-light" id="box-a-img" th:src="@{/images/sun.png}" height="20px" alt="">
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<script th:src="@{/static/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
