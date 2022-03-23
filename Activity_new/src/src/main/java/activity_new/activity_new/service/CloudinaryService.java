@@ -1,0 +1,13 @@
+package activity_new.activity_new.service;
+
+import activity_new.activity_new.service.impl.CloudinaryImage;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+public interface CloudinaryService {
+
+    CloudinaryImage upload(MultipartFile file) throws IOException;
+
+    boolean delete ( String publicId);
+}
