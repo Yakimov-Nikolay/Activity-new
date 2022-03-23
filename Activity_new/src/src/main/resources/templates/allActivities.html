@@ -18,23 +18,24 @@
     </div>
 
     <hr class="featurette-divider">
-    <div class="row featurette" >
-        <div class="col-md-7" th:each="a : ${allvideoActivities}">
-            <h2 class="featurette-heading" th:text="*{a.title}">First featurette heading. <span
-                    class="text-muted">It’ll blow your mind.</span></h2>
+    <div class="row featurette" th:each="a :${videoActivities}">
+        <div class="col-md-7">
+            <h3 >Project Name</h3>
+            <h2 class="featurette-heading" th:text="*{a.title}">First featurette heading.<span
+                    class="text-muted"></span></h2>
+            <h3>Project Description</h3>
             <p class="lead" th:text="*{a.description}">Some great placeholder content for the first featurette here. Imagine some exciting
                 prose here.</p>
         </div>
         <div class="col-md-5">
             <iframe width="420" height="315"
-                    th:src="'https://www.youtube.com/embed/' + *{a.getVideoUrl()}">
+                    th:src="'https://www.youtube.com/embed/'+ *{a.videoUrl}">
             </iframe>
         </div>
-        <p><a class="btn btn-lg btn-primary" href="#">Details</a></p>
+        <p><a class="btn btn-lg btn-primary" th:href="@{/{id}/details(id = *{a.id})}">Details</a></p>
 
         <hr class="featurette-divider">
     </div>
-
 
     <footer th:replace="fragments/footer::footer">
     </footer>

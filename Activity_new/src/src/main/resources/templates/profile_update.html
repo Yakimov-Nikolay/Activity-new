@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::head">
+</head>
+<body>
+<header th:replace="fragments/navigation::navigation">
+</header>
+<div class="divider d-flex align-items-center my-4">
+    <p class="text-center fw-bold mx-3 mb-0"></p>
+</div>
+<div class="divider d-flex align-items-center my-4">
+    <p class="text-center fw-bold mx-3 mb-0"></p>
+</div>
+
+<section class="section about-section gray-bg" id="about">
+    <div class="container">
+        <form
+                th:object="${update_profile}"
+                th:method="patch"
+                th:action="@{/users/profile/update}">
+            <div class="row align-items-center flex-row-reverse">
+                <div class="col-lg-6">
+                    <div class="about-text go-to">
+                        <h3 class="dark-color">About Me</h3>
+                        <textarea
+                                th:field="*{description}"
+                                th:errorclass="is-invalid"
+                                type="text"
+                                name="description"
+                                id="description"
+                                class="form-control">
+                    </textarea>
+                        <p class="invalid-feedback alert-danger">Enter valid description</p>
+                        <br>
+                        <div class="row about-list">
+<!--                            <div class="col-md-6">-->
+<!--                                <label for="age">Birthday</label><br>-->
+<!--                                <input-->
+<!--                                        th:field="*{birthday}"-->
+<!--                                        th:errorclass="is-invalid"-->
+<!--                                        type="date"-->
+<!--                                        min="10"-->
+<!--                                        id="Birthday"-->
+<!--                                        placeholder="Enter your Birthday"-->
+<!--                                        name="Birthday"-->
+<!--                                        required/>-->
+
+<!--                                <p class="invalid-feedback alert-danger">Enter valid Birthday</p>-->
+<!--                                <br>-->
+<!--                            </div>-->
+                            <label for="age">Age</label><br>
+                            <input
+                                    th:field="*{age}"
+                                    th:errorclass="is-invalid"
+                                    type="text"
+                                    min="10"
+                                    max="135"
+                                    id="age"
+                                    placeholder="Enter Age"
+                                    name="Age"
+                                    required/>
+
+                            <p class="invalid-feedback alert-danger">Enter valid age</p>
+                            <br>
+
+                            <label for="age">Phone</label><br>
+                            <input
+                                    th:field="*{phone}"
+                                    th:errorclass="is-invalid"
+                                    type="text"
+                                    id="phone"
+                                    placeholder="Enter phone number"
+                                    name="Phone"
+                                    required/>
+
+                            <p class="invalid-feedback alert-danger">Enter valid phone</p>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-avatar">
+                        <p>
+                            <img src="https://www.google.bg/url?sa=i&url=https%3A%2F%2Fwww.pds-mfp.com%2Fwhat-happens-when-you-update-your-xerox-printer%2F&psig=AOvVaw0_Q2SjRWKaIEVpHMlgPW0G&ust=1646744148218000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCOjSgqCGtPYCFQAAAAAdAAAAABAb" title="" alt="">
+                        </p>
+                        <!--                    <p th:if="*{profile.getSex() == 'FEMALE'}">-->
+                        <!--                        <img src="https://bootdey.com/img/Content/avatar/avatar8.png" title="" alt="">-->
+                        <!--                    </p>-->
+                    </div>
+                </div>
+            </div>
+            <div class="counter">
+                <div class="row">
+                    <div class="col-6 col-lg-3">
+                        <div class="count-data text-center">
+                            <h6 class="count h2" data-to="500" data-speed="500"></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" value="submit">Update your profile</button>
+        </form>
+    </div>
+</section>
+
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

@@ -20,8 +20,11 @@
                     <li sec:authorize="!isAuthenticated()" class="nav-item">
                         <a class="nav-link active" aria-current="page" th:href="@{/users/login}">Login</a>
                     </li>
-                    <li  sec:authorize="isAuthenticated()"class="nav-item">
+                    <li  sec:authorize="isAuthenticated()" class="nav-item">
                         <a class="nav-link active" aria-current="page" th:href="@{/add}">Add</a>
+                    </li>
+                    <li  sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
                     </li>
                     <li  sec:authorize="hasRole('ADMIN')" class="nav-item">
                         <a class="nav-link active" aria-current="page" th:href="@{/admin}">Admin</a>
@@ -44,8 +47,8 @@
                 </div>
 
                 <form class="d-flex">
-                    <h6 class="text-light">Температурата в София:</h6><h6></h6>
-                    <h6 class="text-light"><span id="box-a-temp">11</span><span>&#8451;</span></h6>
+                    <h6 class="text-light"> Температурата в София : </h6><h6></h6>
+                    <h6 class="text-light"><span id="box-a-temp"> 11</span><span>&#8451;</span></h6>
                     <img class="bg-light" id="box-a-img" th:src="@{/images/sun.png}" height="20px" alt="">
                 </form>
             </div>
