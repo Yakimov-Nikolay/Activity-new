@@ -2,13 +2,13 @@ package activity_new.activity_new.web;
 
 import activity_new.activity_new.model.binding.AddActivityBindingModel;
 import activity_new.activity_new.service.ActivityService;
+import activity_new.activity_new.service.PictureService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -19,17 +19,19 @@ public class ActivityController {
 
     private final ActivityService activityService;
     private final ModelMapper modelMapper;
+    private final PictureService pictureService;
 
-    public ActivityController(ActivityService activityService, ModelMapper modelMapper) {
+    public ActivityController(ActivityService activityService, ModelMapper modelMapper, PictureService pictureService) {
         this.activityService = activityService;
         this.modelMapper = modelMapper;
+        this.pictureService = pictureService;
     }
 
     @GetMapping("/all")
-    public String all(Model model) {
+    public String allActivity(Model model) {
 
-        model.addAttribute("allVideoActivities", activityService.findAllActivitiesViewModels());
-        return "redirect:/allActivities";
+        model.addAttribute("videoActivities", activityService.findAllActivitiesViewModels());
+        return "/allActivities";
     }
 
     @GetMapping("/add")
@@ -52,9 +54,26 @@ public class ActivityController {
         return "redirect:/";
     }
 
+    @GetMapping("/{id}/details")
+    public String details(@PathVariable Long id,
+                          Model model, Principal principal) {
+        model.addAttribute("detail", this.activityService.findById(id, principal.getName()));
+
+        return "activity_details";
+    }
+
+    @PreAuthorize("isOwner(#id)")
+    @DeleteMapping("/{id}/details")
+    public String delete(@PathVariable Long id) {
+
+        activityService.deleteActivity(id);
+
+        return "/allActivities";
+
+    }
+
     @ModelAttribute
     public AddActivityBindingModel addActivityBindingModel() {
         return new AddActivityBindingModel();
     }
-
 }

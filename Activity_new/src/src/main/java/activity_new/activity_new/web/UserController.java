@@ -1,22 +1,27 @@
 package activity_new.activity_new.web;
 
+import activity_new.activity_new.model.binding.UpdateProfileBindingModel;
 import activity_new.activity_new.model.binding.UserRegisterBindingModel;
+import activity_new.activity_new.model.service.ProfileUpdateServiceModel;
 import activity_new.activity_new.model.service.UserServiceModel;
+import activity_new.activity_new.model.view.ActivityViewModel;
+import activity_new.activity_new.model.view.ProfileDetailsViewModel;
+import activity_new.activity_new.service.ActivityService;
 import activity_new.activity_new.service.UserService;
+import activity_new.activity_new.service.exception.ObjectNotFoundException;
 import activity_new.activity_new.service.impl.EmailService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+
+import java.util.*;
 
 @Controller
 @RequestMapping("/users")
@@ -24,11 +29,13 @@ public class UserController {
 
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final ActivityService activityService;
     private final EmailService emailService;
 
-    public UserController(ModelMapper modelMapper, UserService userService, EmailService emailService) {
+    public UserController(ModelMapper modelMapper, UserService userService, ActivityService activityService, EmailService emailService) {
         this.modelMapper = modelMapper;
         this.userService = userService;
+        this.activityService = activityService;
         this.emailService = emailService;
     }
 
@@ -74,7 +81,30 @@ public class UserController {
     public String profile(Model model, Principal principal) {
 
         model.addAttribute("profile", userService.findByUsername(principal.getName()));
+
         return "/profile";
+    }
+
+    @GetMapping("/profile/{id}/update")
+    public String updateProfile(Model model, Principal principal, @PathVariable Long id) {
+
+        ProfileDetailsViewModel profileDetailsViewModel = userService.findProfileById(id, principal.getName());
+
+        UpdateProfileBindingModel updateProfileBindingModel = modelMapper.map(profileDetailsViewModel, UpdateProfileBindingModel.class);
+
+        model.addAttribute("update_profile", updateProfileBindingModel);
+
+        return "/profile_update";
+    }
+
+    @PatchMapping("/profile/update")
+    public String update(UpdateProfileBindingModel updateProfileBindingModel) throws ObjectNotFoundException {
+
+        ProfileUpdateServiceModel profileUpdateServiceModel =
+                modelMapper.map(updateProfileBindingModel, ProfileUpdateServiceModel.class);
+        userService.updateProfile(profileUpdateServiceModel);
+
+        return "redirect:/";
     }
 
 
