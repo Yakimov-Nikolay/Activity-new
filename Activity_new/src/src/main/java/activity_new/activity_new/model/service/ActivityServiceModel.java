@@ -8,7 +8,6 @@ import java.util.Set;
 
 public class ActivityServiceModel extends BaseServiceModel{
 
-//    private Long id;
     private String title;
     private String description;
     private UserEntity author;
@@ -17,15 +16,6 @@ public class ActivityServiceModel extends BaseServiceModel{
 
     public ActivityServiceModel() {
     }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public ActivityServiceModel setId(Long id) {
-//        this.id = id;
-//        return this;
-//    }
 
     public String getTitle() {
         return title;

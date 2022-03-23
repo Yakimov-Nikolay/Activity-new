@@ -1,19 +1,26 @@
 package activity_new.activity_new.model.service;
 
+import activity_new.activity_new.model.entity.GenderEntity;
 import activity_new.activity_new.model.entity.RoleEntity;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 public class UserServiceModel extends BaseServiceModel{
 
+
     private String username;
     private String firstName;
     private String lastName;
-//    private String sex;
-//    private Integer age;
+    private GenderEntity sex;
+    private Integer age;
     private String password;
     private String email;
+    private Integer phone;
+    private LocalDateTime birthday;
+    private String description;
+    private LocalDateTime createdPr;
     private Set<RoleEntity> roles = new HashSet<>();
 
     public UserServiceModel() {
@@ -46,23 +53,23 @@ public class UserServiceModel extends BaseServiceModel{
         return this;
     }
 
-//    public String getSex() {
-//        return sex;
-//    }
-//
-//    public UserServiceModel setSex(String sex) {
-//        this.sex = sex;
-//        return this;
-//    }
-//
-//    public int getAge() {
-//        return age;
-//    }
-//
-//    public UserServiceModel setAge(int age) {
-//        this.age = age;
-//        return this;
-//    }
+    public GenderEntity getSex() {
+        return sex;
+    }
+
+    public UserServiceModel setSex(GenderEntity sex) {
+        this.sex = sex;
+        return this;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public UserServiceModel setAge(Integer age) {
+        this.age = age;
+        return this;
+    }
 
     public String getPassword() {
         return password;
@@ -79,6 +86,42 @@ public class UserServiceModel extends BaseServiceModel{
 
     public UserServiceModel setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public Integer getPhone() {
+        return phone;
+    }
+
+    public UserServiceModel setPhone(Integer phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+
+    public UserServiceModel setBirthday(LocalDateTime birthday) {
+        this.birthday = birthday;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public UserServiceModel setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public LocalDateTime getCreatedPr() {
+        return createdPr;
+    }
+
+    public UserServiceModel setCreatedPr(LocalDateTime createdPr) {
+        this.createdPr = createdPr;
         return this;
     }
 
