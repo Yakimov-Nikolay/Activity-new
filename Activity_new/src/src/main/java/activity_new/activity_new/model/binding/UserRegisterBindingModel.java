@@ -14,6 +14,7 @@ public class UserRegisterBindingModel {
     private String firstName;
     private String lastName;
     private String password;
+    private String sex;
     private String confirmPassword;
     private String email;
 
@@ -50,6 +51,15 @@ public class UserRegisterBindingModel {
 
     public UserRegisterBindingModel setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public UserRegisterBindingModel setSex(String sex) {
+        this.sex = sex;
         return this;
     }
 
