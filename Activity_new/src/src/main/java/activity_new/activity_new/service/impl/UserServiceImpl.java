@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
             UserEntity Nikolay = new UserEntity();
             Nikolay
                     .setUsername("Niki")
-                    .setPassword(passwordEncoder.encode("Qwer1234"))
+                    .setPassword(passwordEncoder.encode("Test1234"))
                     .setAge(36)
                     .setEmail("yakimov099@gmail.com")
                     .setFirstName("Nikolay")
@@ -158,11 +158,11 @@ public class UserServiceImpl implements UserService {
             UserEntity Lili = new UserEntity();
             Lili
                     .setUsername("Lilia")
-                    .setPassword(passwordEncoder.encode("Qwer1234"))
+                    .setPassword(passwordEncoder.encode("Test1234"))
                     .setAge(37)
                     .setEmail("lilia099@gmail.com")
                     .setFirstName("lilia")
-                    .setLastName("Yakimova")
+                    .setLastName("Petrova")
                     .setSex(female)
                     .setCreatedPr(LocalDateTime.now());
 
