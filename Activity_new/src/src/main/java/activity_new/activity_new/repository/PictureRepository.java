@@ -15,4 +15,6 @@ public interface PictureRepository extends JpaRepository<PictureEntity, Long> {
     @Query("select p from PictureEntity p where p.activity.id = ?1")
     List<PictureEntity> findAllByActivity_Id(Long id);
 
+    void deleteByPublicId(String publicId);
+
 }
