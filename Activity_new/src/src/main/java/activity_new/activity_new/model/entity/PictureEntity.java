@@ -1,9 +1,8 @@
 package activity_new.activity_new.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.thymeleaf.standard.expression.Each;
+
+import javax.persistence.*;
 import java.util.*;
 
 @Entity
@@ -15,9 +14,20 @@ public class PictureEntity extends BaseEntity {
     private UserEntity author;
     private String description;
     private String publicId;
-    private List<CommentEntity> comments;
+    private ActivityEntity activity;
+
 
     public PictureEntity() {
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    public ActivityEntity getActivity() {
+        return activity;
+    }
+
+    public PictureEntity setActivity(ActivityEntity activity) {
+        this.activity = activity;
+        return this;
     }
 
     public String getTitle() {
@@ -38,7 +48,7 @@ public class PictureEntity extends BaseEntity {
         return this;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     public UserEntity getAuthor() {
         return author;
     }
@@ -57,6 +67,7 @@ public class PictureEntity extends BaseEntity {
         return this;
     }
 
+    @Column(nullable = false)
     public String getPublicId() {
         return publicId;
     }
@@ -66,13 +77,4 @@ public class PictureEntity extends BaseEntity {
         return this;
     }
 
-    @OneToMany
-    public List<CommentEntity> getComments() {
-        return comments;
-    }
-
-    public PictureEntity setComments(List<CommentEntity> comments) {
-        this.comments = comments;
-        return this;
-    }
 }

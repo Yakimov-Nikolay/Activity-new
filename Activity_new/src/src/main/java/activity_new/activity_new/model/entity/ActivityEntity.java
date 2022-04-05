@@ -17,21 +17,30 @@ public class ActivityEntity extends BaseEntity {
     private UserEntity author;
     private String videoUrl;
     private LocalDateTime created;
-    private Set<PictureEntity> pictures = new HashSet<>();
+    private List<PictureEntity> pictures;
+    private List<CommentEntity> commentEntityList;
 
-    @OneToMany(mappedBy = "comments", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public Set<PictureEntity> getPictures() {
+    public ActivityEntity() {
+    }
+
+    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY)
+    public List<PictureEntity> getPictures() {
         return pictures;
     }
 
-    public ActivityEntity setPictures(Set<PictureEntity> pictures) {
+    public ActivityEntity setPictures(List<PictureEntity> pictures) {
         this.pictures = pictures;
         return this;
     }
 
-    private List<CommentEntity> commentEntityList;
+    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public List<CommentEntity> getCommentEntityList() {
+        return commentEntityList;
+    }
 
-    public ActivityEntity() {
+    public ActivityEntity setCommentEntityList(List<CommentEntity> commentEntityList) {
+        this.commentEntityList = commentEntityList;
+        return this;
     }
 
     @Column(nullable = false)
@@ -84,13 +93,4 @@ public class ActivityEntity extends BaseEntity {
         return this;
     }
 
-    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public List<CommentEntity> getCommentEntityList() {
-        return commentEntityList;
-    }
-
-    public ActivityEntity setCommentEntityList(List<CommentEntity> commentEntityList) {
-        this.commentEntityList = commentEntityList;
-        return this;
-    }
 }
