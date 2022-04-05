@@ -7,6 +7,7 @@ import activity_new.activity_new.repository.PictureRepository;
 import activity_new.activity_new.service.CloudinaryService;
 import activity_new.activity_new.service.PictureService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -50,9 +51,20 @@ public class PicturesController {
 
         return "redirect:/";
     }
+    @Transactional
+    @DeleteMapping("/details/delete/picture")
+    public String deletePic(@RequestParam("publicId") String publicId) {
+
+        if (cloudinaryService.delete(publicId)){
+            pictureRepository.deleteByPublicId(publicId);
+        }
+
+        return "redirect:/all";
+    }
+
 
     @ModelAttribute
-    public UploadPictureBindingModel uploadPictureBindingModel(){
+    public UploadPictureBindingModel uploadPictureBindingModel() {
         return new UploadPictureBindingModel();
     }
 }
