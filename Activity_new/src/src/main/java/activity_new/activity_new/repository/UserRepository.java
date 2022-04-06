@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -14,6 +15,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Collection<Object> findByUsernameIgnoreCase(String userName);
 
-
     Optional<Object> findProfileById(Long id);
+
+    List<UserEntity> findAll();
 }
