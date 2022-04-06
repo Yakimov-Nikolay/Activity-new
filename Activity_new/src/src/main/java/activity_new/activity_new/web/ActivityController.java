@@ -1,13 +1,16 @@
 package activity_new.activity_new.web;
 
 import activity_new.activity_new.model.binding.AddActivityBindingModel;
+import activity_new.activity_new.repository.PictureRepository;
 import activity_new.activity_new.service.ActivityService;
+import activity_new.activity_new.service.CloudinaryService;
 import activity_new.activity_new.service.PictureService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +25,15 @@ public class ActivityController {
     private final ActivityService activityService;
     private final ModelMapper modelMapper;
     private final PictureService pictureService;
+    private final CloudinaryService cloudinaryService;
+    private final PictureRepository pictureRepository;
 
-    public ActivityController(ActivityService activityService, ModelMapper modelMapper, PictureService pictureService) {
+    public ActivityController(ActivityService activityService, ModelMapper modelMapper, PictureService pictureService, CloudinaryService cloudinaryService, PictureRepository pictureRepository) {
         this.activityService = activityService;
         this.modelMapper = modelMapper;
         this.pictureService = pictureService;
+        this.cloudinaryService = cloudinaryService;
+        this.pictureRepository = pictureRepository;
     }
 
     @GetMapping("/all")
@@ -53,7 +60,7 @@ public class ActivityController {
 
         activityService.addActivity(addActivityBindingModel, principal.getName());
 
-        return "redirect:/";
+        return "redirect:/all";
     }
 
     @GetMapping("/{id}/details")
@@ -64,6 +71,8 @@ public class ActivityController {
 
         return "activity_details";
     }
+
+
 
     @PreAuthorize("isOwner(#id)")
     @DeleteMapping("/{id}/details")

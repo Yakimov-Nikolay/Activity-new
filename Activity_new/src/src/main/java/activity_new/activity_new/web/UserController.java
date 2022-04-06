@@ -4,8 +4,8 @@ import activity_new.activity_new.model.binding.UpdateProfileBindingModel;
 import activity_new.activity_new.model.binding.UserRegisterBindingModel;
 import activity_new.activity_new.model.service.ProfileUpdateServiceModel;
 import activity_new.activity_new.model.service.UserServiceModel;
-import activity_new.activity_new.model.view.ActivityViewModel;
 import activity_new.activity_new.model.view.ProfileDetailsViewModel;
+import activity_new.activity_new.repository.ActivityRepository;
 import activity_new.activity_new.service.ActivityService;
 import activity_new.activity_new.service.UserService;
 import activity_new.activity_new.service.exception.ObjectNotFoundException;
@@ -21,20 +21,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.security.Principal;
 
-import java.util.*;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final ActivityRepository activityRepository;
     private final ActivityService activityService;
     private final EmailService emailService;
 
-    public UserController(ModelMapper modelMapper, UserService userService, ActivityService activityService, EmailService emailService) {
+    public UserController(ModelMapper modelMapper, UserService userService, ActivityRepository activityRepository, ActivityService activityService, EmailService emailService) {
         this.modelMapper = modelMapper;
         this.userService = userService;
+        this.activityRepository = activityRepository;
         this.activityService = activityService;
         this.emailService = emailService;
     }
@@ -81,6 +81,7 @@ public class UserController {
     public String profile(Model model, Principal principal) {
 
         model.addAttribute("profile", userService.findByUsername(principal.getName()));
+        model.addAttribute("count_of_activity", activityRepository.count());
 
         return "/profile";
     }
