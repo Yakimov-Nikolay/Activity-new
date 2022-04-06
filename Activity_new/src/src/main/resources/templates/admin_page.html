@@ -19,37 +19,81 @@
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">WELCOME TO THE BOSS ROOM</h1>
-                <p class="lead text-muted">Something short and leading about the collection below—its contents, the
-                    creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it
-                    entirely.</p>
+                <p class="lead text-muted">Here you get the latest information about the status of the app</p>
                 <p>
-                    <a href="#" class="btn btn-primary my-2">Main call to action</a>
-                    <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+                    <a href="/" class="btn btn-primary my-2">Home</a>
+                    <a th:href="@{/all}" class="btn btn-secondary my-2">View all activities</a>
                 </p>
             </div>
         </div>
     </section>
 
-
-    <div class="card" style="width: 18rem;">
-        <img src="https://www.cdc.gov/nchs/images/stat-city.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Statistic</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div class="card-group">
+        <div class="card" >
+            <img src="https://www.cdc.gov/nchs/images/stat-city.png" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Statistic</h5>
+                <p class="card-text">For you "Activities" has prepared the following statistics:</p>            </div>
+            <div class="card-footer">
+                <li class="list-group-item">Total Requests: <th:block th:text="${stat.getTotalRequests()}" ></th:block></li>
+                <li class="list-group-item">AnonymousRequests: <th:block th:text="${stat.getAnonymousRequests()}"></th:block></li>
+                <li class="list-group-item">AuthenticatedRequests:<th:block th:text="${stat.getAuthRequests()}"></th:block></li>
+            </div>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Total Requests: <th:block th:text="${stat.getTotalRequests()}" ></th:block></li>
-            <li class="list-group-item">AnonymousRequests: <th:block th:text="${stat.getAnonymousRequests()}"></th:block></li>
-            <li class="list-group-item">AuthenticatedRequests:<th:block th:text="${stat.getAuthRequests()}"></th:block></li>
-        </ul>
-        <div class="card-body">
-            <a href="/" class="card-link">Index_page</a>
-            <a href="#" class="card-link">Another link</a>
+        <div class="card" th:object="${count_of_activity}">
+            <img src="https://www.bigmountainanalytics.com/wp-content/uploads/2020/11/shutterstock_267422855-680x449-1.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Activities count</h5>
+                <p class="card-text">Activities count</p>
+            </div>
+            <div class="card-footer">
+                <li class="list-group-item">Total activities:  <h3 th:text="${count_of_activity.size()}"></h3></li>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://www.appsflyer.com/wp-content/uploads/2021/01/user-acquisition-guide.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Total users</h5>
+                <p class="card-text">Total users.</p>
+            </div>
+            <div class="card-footer">
+                <li class="list-group-item">Total users:  <h3 th:text="${count_of_users.size()}"></h3></li>
+            </div>
         </div>
     </div>
-    <!--https://www.nao.org.uk/graduateblog/wp-content/uploads/sites/19/2015/03/ideas-scheme.jpg-->
-    <!--    https://latina.unicusano.it/wp-content/uploads/2018/07/come-sviluppare-unidea-e1532386488328-878x400.jpg-->
-    <!--https://alcorfund.com/wp-content/uploads/2020/08/MicrosoftTeams-image-12-1.png-->
+
+
+<!--    <div class="card">-->
+<!--        <img src="https://www.cdc.gov/nchs/images/stat-city.png" class="card-img-top" alt="...">-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title">Statistic</h5>-->
+<!--            <p class="card-text">For you "Activities" has prepared the following statistics:</p>-->
+<!--        </div>-->
+<!--        <ul class="list-group list-group-flush">-->
+<!--            <li class="list-group-item">Total Requests: <th:block th:text="${stat.getTotalRequests()}" ></th:block></li>-->
+<!--            <li class="list-group-item">AnonymousRequests: <th:block th:text="${stat.getAnonymousRequests()}"></th:block></li>-->
+<!--            <li class="list-group-item">AuthenticatedRequests:<th:block th:text="${stat.getAuthRequests()}"></th:block></li>-->
+<!--        </ul>-->
+<!--        <div class="card-body">-->
+<!--            <a href="/" class="card-link">Index_page</a>-->
+<!--            <a th:href="@{/users/profile}" class="card-link">Profile</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="card" th:object="${count_of_activity}">-->
+<!--        <img src="https://www.cdc.gov/nchs/images/stat-city.png" class="card-img-top" alt="...">-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title">Total Activities</h5>-->
+<!--            <p class="card-text">For you "Activities" has make  </p>-->
+<!--        </div>-->
+<!--        <ul class="list-group list-group-flush">-->
+<!--            <li class="list-group-item">Total Video:  <h3 th:text="${count_of_activity.size()}"></h3></li>-->
+<!--        </ul>-->
+<!--        <div class="card-body">-->
+<!--            <a href="/" class="card-link">Index_page</a>-->
+<!--            <a th:href="@{/users/profile}" class="card-link">Profile</a>-->
+<!--        </div>-->
+<!--    </div>-->
+
 </maim>
 </body>
 <footer th:replace="fragments/footer::footer"></footer>

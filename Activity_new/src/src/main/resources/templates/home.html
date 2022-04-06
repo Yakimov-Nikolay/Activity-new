@@ -7,7 +7,7 @@
 <body>
 <header th:replace="fragments/navigation::navigation">
 </header>
-<maim>
+<main>
     <div class="divider d-flex align-items-center my-4">
         <p class="text-center fw-bold mx-3 mb-0"></p>
     </div>
@@ -17,15 +17,31 @@
     <div class="card mb-3">
         <img src="https://latina.unicusano.it/wp-content/uploads/2018/07/come-sviluppare-unidea-e1532386488328-878x400.jpg" class="card-img-top" alt="...">
         <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            <h5 class="card-title">Welcome <span sec:authorize="isAuthenticated()" sec:authentication="name"></span></h5>
+
+            <p class="card-text">Based on your idea, we have added the following activities.</p>
         </div>
     </div>
-<!--https://www.nao.org.uk/graduateblog/wp-content/uploads/sites/19/2015/03/ideas-scheme.jpg-->
-<!--    https://latina.unicusano.it/wp-content/uploads/2018/07/come-sviluppare-unidea-e1532386488328-878x400.jpg-->
-<!--https://alcorfund.com/wp-content/uploads/2020/08/MicrosoftTeams-image-12-1.png-->
-</maim>
+
+    <hr class="featurette-divider">
+    <div class="row featurette" th:each="a :${user_home}">
+        <div class="col-md-5">
+            <iframe width="350" height="280"
+                    th:src="'https://www.youtube.com/embed/'+ *{a.videoUrl}">
+            </iframe>
+        </div>
+        <div class="col-md-7">
+            <h4>Activity name</h4>
+            <h2 class="featurette-heading" th:text="*{a.title}">name<span
+                    class="text-muted"></span></h2>
+            <h4>Created</h4>
+            <p class="lead" th:text="*{a.created}">date</p>
+        </div>
+
+<!--        <p><a class="btn btn-lg btn-primary" th:href="@{/{id}/details(id = *{a.id})}">Details</a></p>-->
+        <hr class="featurette-divider">
+    </div>
+</main>
 </body>
 <footer th:replace="fragments/footer::footer"></footer>
 </html>
