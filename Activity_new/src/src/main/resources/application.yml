@@ -38,4 +38,4 @@ cloudinary:
   cloud-name: dnofiqj3t
 
 schedulers:
-  cron: "0 45 10 * * TUE"
+  cron: "0 0 0 * * *"
