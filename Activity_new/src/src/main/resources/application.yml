@@ -1,0 +1,41 @@
+logging:
+  level:
+    blog: WARN
+    org: WARN
+    org.hibernate.SQL: DEBUG
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: ****
+    url: jdbc:mysql://localhost:3306/activity_new?useSSL=false&createDatabaseIfNotExist=true
+    username: ****
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    password: xjwkmphndhmjfcjx
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    username: yakimov099@gmail.com
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+cloudinary:
+  api-key: 984113434652238
+  api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: dnofiqj3t
+
+schedulers:
+  cron: "0 45 10 * * TUE"
