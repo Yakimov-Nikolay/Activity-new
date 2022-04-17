@@ -12,71 +12,82 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
+import org.springframework.security.core.userdetails.UserDetails;
+import javax.persistence.Transient;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @ExtendWith(MockitoExtension.class)
-class ActivitySerImplTest {
+public class ActivitySerImplTest {
 
     private UserEntity testUser;
-
+    private RoleEntity adminRole, moderatorRole, userRole;
     private ActivitySerImpl serviceToTest;
 
     @Mock
-    private UserRepository mockUserRepository;
+    public UserRepository mockUserRepository;
+
+    public UserEntity getTestUser() {
+        return testUser;
+    }
+
 
     @BeforeEach
-    void init() {
+    public void init() {
 
         //ARRANGE
         serviceToTest = new ActivitySerImpl(mockUserRepository);
 
-        RoleEntity adminRole = new RoleEntity();
+        adminRole = new RoleEntity();
         adminRole.setRole(RoleEnumName.ADMIN);
 
-        RoleEntity userRole = new RoleEntity();
+        userRole = new RoleEntity();
         userRole.setRole(RoleEnumName.USER);
 
+        moderatorRole = new RoleEntity();
+        userRole.setRole(RoleEnumName.MODERATOR);
 
         testUser = new UserEntity();
+
         testUser.setUsername("Niki");
+        testUser.setFirstName("Nikolay");
+        testUser.setLastName("Yakimov");
         testUser.setEmail("yakimov099@gmail.com");
-        testUser.setPassword("Test1234");
-        testUser.setRoles(Set.of(adminRole, userRole));
+        testUser .setPassword("Test1234");
+        testUser.setRoles(Set.of(adminRole, userRole, moderatorRole));
     }
 
     @Test
     public void testUserNotFound() {
 
         Assertions.assertThrows(
-                UsernameNotFoundException.class,
-                () -> serviceToTest.loadUserByUsername("Peso_not_found")
+                NullPointerException.class,
+                () -> serviceToTest.loadUserByUsername("Nikita")
         );
     }
 
     @Test
     public void testUserFound() {
 
+
         //Arrange
         Mockito.when(mockUserRepository.findByUsername(testUser.getUsername()))
                 .thenReturn(Optional.of(testUser));
 
         //Act
-        var actual = serviceToTest.loadUserByUsername(testUser.getUsername());
+        UserDetails userDetails = serviceToTest.loadUserByUsername(testUser.getUsername());
 
         //Assert
-
-        String expectedRoles = "ROLE_ADMIN, ROLE_USER";
-        String actualRoles = actual
+        String expectedRoles = "ROLE_USER, ROLE_ADMIN, ROLE_MODERATOR";
+        String actualRoles = userDetails
                 .getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(", "));
 
-        Assertions.assertEquals(actual.getUsername(), testUser.getUsername());
+        Assertions.assertEquals(userDetails.getUsername(), testUser.getUsername());
         Assertions.assertEquals(expectedRoles, actualRoles);
     }
 }
