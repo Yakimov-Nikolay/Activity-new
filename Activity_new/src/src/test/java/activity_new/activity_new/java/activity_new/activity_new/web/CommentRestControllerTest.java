@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.hasSize;
 
-@WithMockUser("Niki")
+@WithMockUser("Ivan")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CommentRestControllerTest {
