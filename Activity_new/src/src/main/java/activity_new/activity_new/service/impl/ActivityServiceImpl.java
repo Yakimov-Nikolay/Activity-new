@@ -7,7 +7,6 @@ import activity_new.activity_new.model.entity.UserEntity;
 import activity_new.activity_new.model.entity.enumerated.RoleEnumName;
 import activity_new.activity_new.model.service.ActivityServiceModel;
 import activity_new.activity_new.model.view.ActivityFullDetailsViewModel;
-import activity_new.activity_new.model.view.ActivityViewModel;
 import activity_new.activity_new.repository.ActivityRepository;
 import activity_new.activity_new.repository.PictureRepository;
 import activity_new.activity_new.repository.UserRepository;
@@ -16,9 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,15 +25,19 @@ public class ActivityServiceImpl implements ActivityService {
     private final PictureRepository pictureRepository;
     private final ActivityRepository activityRepository;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
-    public ActivityServiceImpl(UserRepository userRepository, PictureRepository pictureRepository, ActivityRepository activityRepository,
-                               ModelMapper modelMapper) {
+    public ActivityServiceImpl(UserRepository userRepository, PictureRepository pictureRepository,
+                               ActivityRepository activityRepository,
+                               ModelMapper modelMapper,
+                               EmailService emailService) {
         this.userRepository = userRepository;
         this.pictureRepository = pictureRepository;
         this.activityRepository = activityRepository;
         this.modelMapper = modelMapper;
-
+        this.emailService = emailService;
     }
+
     @Override
     public ActivityServiceModel addActivity(AddActivityBindingModel addActivityBindingModel,
                                             String userIdentifier) {
@@ -49,6 +50,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         newActivity.setAuthor(userEntity);
         newActivity.setCreated(LocalDateTime.now());
+        newActivity.setLikeVideoCounter(0L);
+        newActivity.setDislikeVideoCounter(0L);
         ActivityEntity save = activityRepository.save(newActivity);
 
         return modelMapper.map(save, ActivityServiceModel.class);
@@ -81,12 +84,12 @@ public class ActivityServiceImpl implements ActivityService {
         Optional<ActivityEntity> activityEntityOptional = activityRepository.findById(id);
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(currentUser);
 
-        if (activityEntityOptional.isEmpty() || userEntityOptional.isEmpty()){
+        if (activityEntityOptional.isEmpty() || userEntityOptional.isEmpty()) {
             return false;
-        }else{
+        } else {
             ActivityEntity activityEntity = activityEntityOptional.get();
 
-            return  isAdmin(userEntityOptional.get())
+            return isAdmin(userEntityOptional.get())
                     || activityEntity.getAuthor()
                     .getUsername()
                     .equals(currentUser);
@@ -100,11 +103,44 @@ public class ActivityServiceImpl implements ActivityService {
         activityRepository.deleteById(id);
     }
 
+    @Override
+    public List<ActivityEntity> findActivityEntitiesByAuthorUsername(String name) {
+        return new ArrayList<>(activityRepository.findActivityEntitiesByAuthorUsername(name));
+    }
+
+    @Override
+    public void addLike(Long id) {
+        Optional<ActivityEntity> activityEntity = Optional.of(activityRepository.findById(id).orElseThrow());
+
+        activityRepository
+                .save(activityEntity.get().setLikeVideoCounter(activityEntity.get().getDislikeVideoCounter() + 1));
+    }
+
+    @Override
+    public void addDislike(Long id) {
+        Optional<ActivityEntity> activityEntity = Optional.of(activityRepository.findById(id).orElseThrow());
+        activityRepository
+                .save(activityEntity.get().setDislikeVideoCounter(activityEntity.get().getDislikeVideoCounter() + 1));
+    }
+
+
+    public ActivityEntity findActivityEntityByLikeVideoCounter() {
+         return  activityRepository.findAll()
+                 .stream()
+                 .max((a,b) -> (int) (a.getLikeVideoCounter() - b.getLikeVideoCounter()))
+                 .get();
+
+    }
+
+
+
     private boolean isAdmin(UserEntity userEntity) {
         return userEntity
                 .getRoles()
                 .stream()
                 .map(RoleEntity::getRole)
-                .anyMatch(r -> r== RoleEnumName.ADMIN);
+                .anyMatch(r -> r == RoleEnumName.ADMIN);
     }
+
+
 }
