@@ -1,12 +1,8 @@
 package activity_new.activity_new.model.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.zip.DataFormatException;
 
 @Entity
 @Table(name = "activities")
@@ -19,11 +15,13 @@ public class ActivityEntity extends BaseEntity {
     private LocalDateTime created;
     private List<PictureEntity> pictures;
     private List<CommentEntity> commentEntityList;
+    private Long likeVideoCounter;
+    private Long dislikeVideoCounter;
 
     public ActivityEntity() {
     }
 
-    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public List<PictureEntity> getPictures() {
         return pictures;
     }
@@ -86,6 +84,26 @@ public class ActivityEntity extends BaseEntity {
     @Column
     public String getVideoUrl() {
         return videoUrl;
+    }
+
+    @Column
+    public Long getLikeVideoCounter() {
+        return this.likeVideoCounter;
+    }
+
+    public ActivityEntity setLikeVideoCounter(Long likeVideoCounter) {
+        this.likeVideoCounter = likeVideoCounter;
+        return this;
+    }
+
+    @Column
+    public Long getDislikeVideoCounter() {
+        return dislikeVideoCounter;
+    }
+
+    public ActivityEntity setDislikeVideoCounter(Long dislikeVideoCounter) {
+        this.dislikeVideoCounter = dislikeVideoCounter;
+        return this;
     }
 
     public ActivityEntity setVideoUrl(String videoUrl) {
