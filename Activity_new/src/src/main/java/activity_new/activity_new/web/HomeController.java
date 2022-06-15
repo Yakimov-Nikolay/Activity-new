@@ -1,5 +1,6 @@
 package activity_new.activity_new.web;
 
+import activity_new.activity_new.repository.ActivityRepository;
 import activity_new.activity_new.service.ActivityService;
 import activity_new.activity_new.service.QRCodeService;
 import com.google.zxing.WriterException;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,16 +22,21 @@ public class HomeController {
     private QRCodeService qrCodeService;
 
     private final ActivityService activityService;
+    private final ActivityRepository activityRepository;
 
-    public HomeController(ActivityService activityService) {
+    public HomeController(ActivityService activityService, ActivityRepository activityRepository) {
         this.activityService = activityService;
+        this.activityRepository = activityRepository;
     }
 
-    @RequestMapping("/")
-    public String indexPage() {
-
+    @GetMapping("/")
+    public String indexPage(Model model) {
+        model.addAttribute("mostLikedVideo", activityService.findActivityEntityByLikeVideoCounter());
         return "index";
     }
+
+
+
 
     @PostMapping("/showQRCode")
     public String showQRCode(String qrContent, Model model) {
