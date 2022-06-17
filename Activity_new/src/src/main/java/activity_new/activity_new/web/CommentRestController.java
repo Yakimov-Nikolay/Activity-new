@@ -57,7 +57,6 @@ public class CommentRestController {
         return ResponseEntity.created(locationOfNewComment).body(newComment);
 
     }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> onValidateFailure(MethodArgumentNotValidException exs) {
