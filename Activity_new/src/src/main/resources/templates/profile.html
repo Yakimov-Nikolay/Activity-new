@@ -20,10 +20,7 @@
                 <div th:object="${profile}" class="about-text go-to">
                     <h3 th:text="*{firstName}" class="dark-color">About Me</h3>
                     <h6 th:text="*{lastName}" class="theme-color lead">A Lead UX &amp; UI designer based in Canada</h6>
-                    <p >I<mark>design and develop</mark>
-                        services for customers of all sizes, specializing in creating stylish, modern websites, web
-                        services and online stores. My passion is to design digital user experiences through the bold
-                        interface and meaningful interactions.
+                    <p th:text="*{description}">Description
                     </p>
                     <div class="row about-list">
                         <div class="col-md-6">
@@ -69,7 +66,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="count-data text-center">
                         <h6 class="count h2" data-to="500" data-speed="500"></h6>
-                        <p><a class="btn btn-lg btn-primary" th:href="@{/users/profile/{id}/update(id = *{profile.id})}">Update profile</a></p>
+                        <p><a class="btn btn-lg btn-primary" th:href="@{/users/profile/{id}/update(id = *{profile.id})}">Edit</a></p>
                     </div>
                 </div>
             </div>

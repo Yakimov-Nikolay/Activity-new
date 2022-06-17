@@ -32,7 +32,27 @@
                 <iframe width="700" height="500"
                         th:src="'https://www.youtube.com/embed/'+ *{videoUrl}">
                 </iframe>
+                <div>
+                    <form
+                            id="like_form"
+                            th:method="post"
+                            th:action="@{/{id}/details/like(id = *{id})}">
+                        <div>
+                            <button type="submit" class="btn btn-outline-success">Like</button>
+                        </div>
+                    </form>
+                    <form
+                            id="dislike_form"
+                            th:method="post"
+                            th:action="@{/{id}/details/dislike(id = *{id})}">
+                        <div>
+                            <button type="submit" class="btn btn-outline-danger">Dislike</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
+
 
             <div class="col-sm">
                 <h3 class="my-3">Project Description</h3>
@@ -125,8 +145,6 @@
     <!-- /.row -->
 
     <!--        <p><a class="btn btn-lg btn-primary" th:href="@{/pictures/{id}/upload(id=*{id})}">Upload Image</a></p>-->
-
-
     <!-- /.container -->
 </main>
 </body>
