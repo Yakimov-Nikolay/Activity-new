@@ -42,7 +42,6 @@ public class ActivityController {
         model.addAttribute("videoActivities", activityService.findAllActivitiesViewModels());
         return "/allActivities";
     }
-
     @GetMapping("/add")
     public String add() {
         return "addActivities";
@@ -72,7 +71,16 @@ public class ActivityController {
         return "activity_details";
     }
 
-
+    @PostMapping("/{id}/details/like")
+    public String like(@PathVariable Long id) {
+        activityService.addLike(id);
+        return "redirect:/all";
+    }
+    @PostMapping("/{id}/details/dislike")
+    public String dislike(@PathVariable Long id) {
+        activityService.addDislike(id);
+        return "redirect:/all";
+    }
 
     @PreAuthorize("isOwner(#id)")
     @DeleteMapping("/{id}/details")
@@ -80,7 +88,7 @@ public class ActivityController {
 
         activityService.deleteActivity(id);
 
-        return "/allActivities";
+        return "redirect:/all";
 
     }
 
