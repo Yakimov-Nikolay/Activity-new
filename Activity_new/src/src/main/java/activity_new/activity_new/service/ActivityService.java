@@ -19,5 +19,6 @@ public interface ActivityService {
 
     ActivityEntity findActivityEntityByLikeVideoCounter();
 
+    void initActivity();
 }
 
