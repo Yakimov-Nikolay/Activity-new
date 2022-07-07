@@ -23,8 +23,30 @@ public class UserEntity extends BaseEntity {
     private LocalDateTime createdPr;
     private Set<RoleEntity> roles = new HashSet<>();
 
+    private String verificationCode;
+
+    private boolean enabled;
+
 
     public UserEntity() {
+    }
+    @Column(name = "verification_code", length = 64)
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public UserEntity setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+        return this;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public UserEntity setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
     }
 
     @Column(nullable = false, unique = true)
