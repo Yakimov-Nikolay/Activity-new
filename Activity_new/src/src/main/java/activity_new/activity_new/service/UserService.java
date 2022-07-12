@@ -5,6 +5,7 @@ import activity_new.activity_new.model.service.ProfileUpdateServiceModel;
 import activity_new.activity_new.model.service.UserServiceModel;
 import activity_new.activity_new.model.view.ProfileDetailsViewModel;
 import activity_new.activity_new.service.exception.ObjectNotFoundException;
+import activity_new.activity_new.service.exception.UserNotFoundEx;
 
 public interface UserService {
 
@@ -14,11 +15,14 @@ public interface UserService {
 
     UserEntity findByUsername(String name);
 
-
     ProfileDetailsViewModel findProfileById(Long id, String name);
 
     void updateProfile(ProfileUpdateServiceModel profileUpdateServiceModel) throws ObjectNotFoundException;
 
     void initializeUsersAndRoles();
+
+    void updatePassword();
+
+    void updateResetPasswordToken(String token, String email) throws UserNotFoundEx;
 }
 
