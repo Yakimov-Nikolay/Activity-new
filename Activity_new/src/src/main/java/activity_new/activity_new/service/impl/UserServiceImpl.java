@@ -14,17 +14,23 @@ import activity_new.activity_new.repository.UserRepository;
 import activity_new.activity_new.service.GenderService;
 import activity_new.activity_new.service.UserService;
 import activity_new.activity_new.service.exception.ObjectNotFoundException;
+import activity_new.activity_new.service.exception.UserNotFoundEx;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -71,14 +77,16 @@ public class UserServiceImpl implements UserService {
 //            user.setCreatedPr(LocalDateTime.now());
 //            user.setSex(genderRepository.findBySex(userServiceModel.getSex().getSex()));
         //}
-    //
+        //
         UserEntity user = new UserEntity();
         user = modelMapper.map(userServiceModel, UserEntity.class);
-            user.setPassword(passwordEncoder.encode(userServiceModel.getPassword()))
-                    .setRoles(Set.of(userRole));
-            user.setCreatedPr(LocalDateTime.now());
-            user.setSex(genderRepository.findBySex(userServiceModel.getSex().getSex()));
-
+        user.setPassword(passwordEncoder.encode(userServiceModel.getPassword()))
+                .setRoles(Set.of(userRole));
+        user.setCreatedPr(LocalDateTime.now());
+        user.setSex(genderRepository.findBySex(userServiceModel.getSex().getSex()));
+        String randomCode = RandomString.make(12);
+        user.setVerificationCode(randomCode);
+        user.setEnabled(false);
 
 
         emailService.sendSimpleMessage(user.getEmail(),
@@ -131,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void initializeUsersAndRoles() {
-        if(userRepository.count()==0){
+        if (userRepository.count() == 0) {
 
             RoleEntity adminRole = roleRepository.findByRole(RoleEnumName.ADMIN);
             RoleEntity moderatorRole = roleRepository.findByRole(RoleEnumName.MODERATOR);
@@ -140,7 +148,10 @@ public class UserServiceImpl implements UserService {
             GenderEntity male = genderRepository.findBySex(GenderEnumName.MALE);
             GenderEntity female = genderRepository.findBySex(GenderEnumName.FEMALE);
 
+
+
             UserEntity Nikolay = new UserEntity();
+            String verification = RandomString.make(12);
             Nikolay
                     .setUsername("Niki")
                     .setPassword(passwordEncoder.encode("Test1234"))
@@ -149,13 +160,15 @@ public class UserServiceImpl implements UserService {
                     .setFirstName("Nikolay")
                     .setLastName("Yakimov")
                     .setSex(male)
-                    .setCreatedPr(LocalDateTime.now());
+                    .setCreatedPr(LocalDateTime.now())
+                    .setVerificationCode(verification);
 
-                    Nikolay.setRoles(Set.of(adminRole,userRole,moderatorRole));
-                    userRepository.save(Nikolay);
+            Nikolay.setRoles(Set.of(adminRole, userRole, moderatorRole));
+            userRepository.save(Nikolay);
 
 
             UserEntity Lili = new UserEntity();
+            String verification1 = RandomString.make(12);
             Lili
                     .setUsername("Lilia")
                     .setPassword(passwordEncoder.encode("Test1234"))
@@ -164,13 +177,19 @@ public class UserServiceImpl implements UserService {
                     .setFirstName("lilia")
                     .setLastName("Petrova")
                     .setSex(female)
-                    .setCreatedPr(LocalDateTime.now());
+                    .setCreatedPr(LocalDateTime.now())
+                    .setVerificationCode(verification1);
 
 
-            Lili.setRoles(Set.of(userRole,moderatorRole));
+            Lili.setRoles(Set.of(userRole, moderatorRole));
             userRepository.save(Lili);
 
         }
+    }
+
+    @Override
+    public void updatePassword() {
+
     }
 
 
@@ -178,5 +197,27 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(profile, ProfileDetailsViewModel.class);
     }
 
+    public void updateResetPasswordToken(String email, String token) throws UserNotFoundEx {
+        UserEntity customer = userRepository.findByEmail(email);
+        if(customer != null){
+            customer.setResetPasswordToken(token);
+            userRepository.save(customer);
+        }else {
+            throw new UserNotFoundEx("Could not find any customer with the email " + email);
+        }
+    }
+
+    public UserEntity getByResetToken(String token){
+       return userRepository.findByResetPasswordToken(token);
+    }
+
+    public void updatePassword(UserEntity customer, String newPassword){
+        BCryptPasswordEncoder passwordEncoder1 = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder1.encode(newPassword);
+        customer.setPassword(encodedPassword);
+
+        customer.setResetPasswordToken(null);
+        userRepository.save(customer);
+    }
 
 }
