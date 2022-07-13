@@ -197,11 +197,11 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(profile, ProfileDetailsViewModel.class);
     }
 
-    public void updateResetPasswordToken(String email, String token) throws UserNotFoundEx {
-        UserEntity customer = userRepository.findByEmail(email);
-        if(customer != null){
-            customer.setResetPasswordToken(token);
-            userRepository.save(customer);
+    public void updateResetPasswordToken(String token, String email) throws UserNotFoundEx {
+        UserEntity userEntity = userRepository.findByEmail(email);
+        if(userEntity != null){
+            userEntity.setResetPasswordToken(token);
+            userRepository.save(userEntity);
         }else {
             throw new UserNotFoundEx("Could not find any customer with the email " + email);
         }
