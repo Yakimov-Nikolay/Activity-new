@@ -22,15 +22,25 @@ public class UserEntity extends BaseEntity {
     private String description;
     private LocalDateTime createdPr;
     private Set<RoleEntity> roles = new HashSet<>();
-
     private String verificationCode;
 
+    private String resetPasswordToken;
     private boolean enabled;
 
 
     public UserEntity() {
     }
-    @Column(name = "verification_code", length = 64)
+@Column(length = 12)
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public UserEntity setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+        return this;
+    }
+
+    @Column(name = "verification_code", length = 12)
     public String getVerificationCode() {
         return verificationCode;
     }
