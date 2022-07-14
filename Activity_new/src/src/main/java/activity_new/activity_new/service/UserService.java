@@ -21,8 +21,10 @@ public interface UserService {
 
     void initializeUsersAndRoles();
 
-    void updatePassword();
-
     void updateResetPasswordToken(String token, String email) throws UserNotFoundEx;
+
+    UserEntity getByResetToken(String token);
+
+    void updatePassword(UserEntity userEntity, String password);
 }
 
