@@ -1,9 +1,11 @@
 package activity_new.activity_new.web;
 
+import activity_new.activity_new.model.entity.UserEntity;
 import activity_new.activity_new.service.UserService;
 import activity_new.activity_new.service.exception.UserNotFoundEx;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,7 +33,6 @@ public class ForgotPasswordController {
     }
 
 
-
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm() {
         return "forgot_password_form";
@@ -56,7 +57,7 @@ public class ForgotPasswordController {
 
     public void sendEmail(String recipientEmail, String link) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper  helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message);
 
         helper.setFrom("yakimov009@gmail.com", "Activity Support");
         helper.setTo(recipientEmail);
@@ -79,16 +80,37 @@ public class ForgotPasswordController {
     }
 
     @GetMapping("/reset_password")
-    public String showResetPasswordForm() {
-        return null;
+    public String showResetPasswordForm(@Param(value = "token") String token, Model model) {
+        UserEntity userEntity = userService.getByResetToken(token);
+        model.addAttribute("token", token);
+
+        if (userEntity == null) {
+            model.addAttribute("message", "Invalid Token");
+            return "message";
+        }
+        return "reset_password_form";
     }
 
     @PostMapping("/reset_password")
-    public String processResetPassword() {
-        return null;
+    public String processResetPassword(HttpServletRequest request, Model model) {
+        String token = request.getParameter("token");
+        String password = request.getParameter("password");
+
+        UserEntity userEntity = userService.getByResetToken(token);
+        model.addAttribute("title", "Reset your password");
+
+        if (userEntity == null) {
+            model.addAttribute("message", "Invalid Token");
+            return "message";
+        } else {
+            userService.updatePassword(userEntity, password);
+            model.addAttribute("message", "You have successfully changed your password.");
+        }
+
+        return "message";
     }
 
-    public class Utility {
+    public static class Utility {
         public static String getSiteURL(HttpServletRequest request) {
             String siteURL = request.getRequestURL().toString();
             return siteURL.replace(request.getServletPath(), "");
