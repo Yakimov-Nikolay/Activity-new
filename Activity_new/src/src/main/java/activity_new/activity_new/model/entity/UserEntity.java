@@ -22,40 +22,35 @@ public class UserEntity extends BaseEntity {
     private String description;
     private LocalDateTime createdPr;
     private Set<RoleEntity> roles = new HashSet<>();
-    private String verificationCode;
 
+    private VerificationTokenEntity verificationCode;
     private String resetPasswordToken;
+
     private boolean enabled;
 
-
-    public UserEntity() {
+    @OneToOne
+    public VerificationTokenEntity getVerificationCode() {
+        return verificationCode;
     }
-@Column(length = 12)
+
+    public void setVerificationCode(VerificationTokenEntity verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public UserEntity setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
+    @Column(length = 12)
     public String getResetPasswordToken() {
         return resetPasswordToken;
     }
 
     public UserEntity setResetPasswordToken(String resetPasswordToken) {
         this.resetPasswordToken = resetPasswordToken;
-        return this;
-    }
-
-    @Column(name = "verification_code", length = 12)
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public UserEntity setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-        return this;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public UserEntity setEnabled(boolean enabled) {
-        this.enabled = enabled;
         return this;
     }
 
@@ -177,5 +172,6 @@ public class UserEntity extends BaseEntity {
     public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
+
 
 }
