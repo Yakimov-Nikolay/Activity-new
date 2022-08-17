@@ -8,7 +8,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.util.Locale;
 import java.util.Properties;
 
 @Configuration
@@ -20,35 +24,21 @@ public class ApplicationBeanConfiguration {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new Pbkdf2PasswordEncoder();
     }
 
-//    @Bean
-//    public JavaMailSender javaMailSender(){
-//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//
-//        mailSender.setHost("smtp.gmail.com");
-//        mailSender.setPort(587);
-//
-//        mailSender.setUsername("yakimov099@gmail.com");
-//        mailSender.setPassword("xjwkmphndhmjfcjx");
-//
-//        Properties props = mailSender.getJavaMailProperties();
-//        props.put("mail.transport.protocol", "smtp");
-//        props.put("mail.smtp.auth", "true");
-//        props.put("mail.smtp.starttls.enable", "true");
-//        props.put("mail.debug", "true");
-//
-//        return mailSender;
-//    }
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
+        sessionLocaleResolver.setDefaultLocale(Locale.US);
+        return sessionLocaleResolver;
+    }
 
-
-//    @Bean
-//    public SimpleMailMessage templateSimpleMessage() {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setText(
-//                "This is the test email template for your email:\n%s\n");
-//        return message;
-//    }
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        return localeChangeInterceptor;
+    }
 }
