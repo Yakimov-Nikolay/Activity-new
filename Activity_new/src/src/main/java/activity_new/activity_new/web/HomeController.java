@@ -4,11 +4,14 @@ import activity_new.activity_new.repository.ActivityRepository;
 import activity_new.activity_new.service.ActivityService;
 import activity_new.activity_new.service.QRCodeService;
 import com.google.zxing.WriterException;
+import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,12 +33,16 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String indexPage(Model model) {
+    public String indexPage(Model model ) {
         model.addAttribute("mostLikedVideo", activityService.findActivityEntityByLikeVideoCounter());
         return "index";
     }
 
-
+    @RequestMapping("/international")
+    public String international(Model model, String selectedOption){
+        model.addAttribute("langShow", "/international?lang=" + selectedOption);
+        return "index";
+    }
 
 
     @PostMapping("/showQRCode")
